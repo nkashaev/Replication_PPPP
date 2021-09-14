@@ -1,16 +1,14 @@
+tempdir1=@__DIR__
+rootdir=tempdir1[1:findfirst("PPPP",tempdir1)[end]]*"/Application_Epple/"
+resultsdir=rootdir*"Results"
+using Pkg
+Pkg.activate(".")
 
 using LinearAlgebra, DelimitedFiles
 using Distributions, Statistics
 using Plots
 using Clustering
 
-########################### Dir ################################################
-#office
-rootdir="/Users/SSC4044-iMac27/Dropbox/PSU/Research/Production function/Application_Epple/Julia"
-#home
-rootdir="/Users/nailkashaev/Dropbox/PSU/Research/Production function/Application_Epple/Julia"
-#dirfunc=rootdir*"/functions"
-dirresults=rootdir*"/results"
 ########################### Functions ##########################################
 #include(dirfunc*"/dgp.jl")
 EppleData=readdlm(rootdir*"/Pittsburgh_post1995.txt", ',', Float64, '\n',header=true)
@@ -20,11 +18,10 @@ Data=EppleData[1]
 k=1
 markets=zeros(1000)
 for i=101:953
-global k
-if sum(Data[:,7].==i)>9
-    markets[k]=i
-    k=k+1
-end
+    if sum(Data[:,7].==i)>9
+        markets[k]=i
+        k=k+1
+    end
 end
 
 markets=markets[markets.>100]

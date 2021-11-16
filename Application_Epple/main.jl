@@ -6,7 +6,7 @@ using Distributions, Statistics
 using Plots
 using Clustering
 
-##Dir
+#################################### Dir ###############################
 tempdir1=@__DIR__
 rootdir=tempdir1[1:findfirst("PPPP",tempdir1)[end]]
 dirdata=rootdir*"/Application_Epple/data"

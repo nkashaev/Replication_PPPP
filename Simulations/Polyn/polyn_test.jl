@@ -18,7 +18,7 @@ include(dirmain*"mixSQP.jl")
 pis=[2.0, 2.5, 3.0, 5.5];
 p=[0.4,0.4,0.1,0.1];
 seed=10;
-n=1000;
+n=10000;
 data=dgp(pis,p,n,seed);
 #histogram(data)
 
@@ -49,6 +49,7 @@ param_ini=vcat(θ_hat,log.([0.2,0.2,0.2]))
 param_ini[1]=minimum(data)+0.99
 func2(param_ini)
 
+#This step is not working sometimes because of bad optimizer
 opt2 = optimize(func2, param_ini)
 sol=Optim.minimizer(opt2)
 val=Optim.minimum(opt2)

@@ -82,3 +82,24 @@ function opt1(θ,data,verb=0)
     optimize!(model)
     return value.(p)
 end
+
+function supportadj!(θ_hat,p_hat,data,sup_length=2.0,dens=epanechnikov)
+    badobs=data[findall([sum(p_hat[j]*(dens(data[i]-θ_hat[j]) - dens(data[i]-θ_hat[end])) for j in 1:T-1)+dens(data[i]-θ_hat[end]) for i in 1:n].==0)]
+    badsupport=~(length(badobs)==0)
+    m=0
+    while badsupport
+        for j in eachindex(badobs)
+            Δ=badobs[j] .-θ_hat
+            l=argmin(abs.(Δ))
+            θ_hat[l]=θ_hat[l]+sign(Δ[l])*1.001*(abs(Δ[l])-sup_length/2.0)
+        end
+        badobs=data[findall([sum(p_hat[j]*(dens(data[i]-θ_hat[j]) - dens(data[i]-θ_hat[end])) for j in 1:T-1)+dens(data[i]-θ_hat[end]) for i in 1:n].==0)]
+        badsupport=~(length(badobs)==0)
+        
+        m=m+1
+        if m>1000
+            return println("Too many iterations")
+        end
+    end
+    return θ_hat
+end

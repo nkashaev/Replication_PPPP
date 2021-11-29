@@ -103,14 +103,14 @@ function supportadj!(θ_hat, dens, sup_length, data)
         badobs=data[findall([sum(dens(data[i]-θ_hat[j]) for j in 1:length(θ_hat)) for i in 1:n].==0)]
         badsupport=~(length(badobs)==0)        
         m=m+1
-        if m>1000000
+        if m>10000
             return println("Too many iterations")
         end
     end
     return θ_hat
 end
 
-function mixture_dist(data, dens, sup_length, T, npoints, τ)
+function mixture_dist(data, dens, sup_length, T, npoints, τ, twostep)
     ## SQP method
     θ=[minimum(data)+k*(maximum(data)-minimum(data))/npoints for k in 2:npoints-2]
     out = mixSQP(MatA(θ,data,dens), maxiter = 10,verbose = false);
@@ -124,22 +124,39 @@ function mixture_dist(data, dens, sup_length, T, npoints, τ)
     #Clustering θ to T types
     cl_θ=kmeans(θ_raw', T; weights=p_raw)
     θ_hat=sort(cl_θ.centers[:]) #Intial guess for θ
-    out2 = mixSQP(MatA(θ_hat,data,dens),x = ones(length(θ_hat))/length(θ_hat),verbose=false); 
-    p_hat=out2["x"] #Intial guess for p
     #Support adjustment
     θ_hat=supportadj!(θ_hat, dens, sup_length, data)
-    #Final optimization
-    param_ini=vcat(θ_hat,log.(ones(length(θ_hat))[1:end-1]/length(θ_hat))) # Log is taken since we use exp(variable) to guarantee that p>0
-    #param_ini=vcat(θ_hat,log.(p_hat)[1:end-1]) # Log is taken since we use exp(variable) to guarantee that p>0
-    #opt2 = optimize(vars->-loglike(vars,data), param_ini1, iterations=10^5)
-    opt = optimize(vars->-loglike(vars,data,dens), param_ini, iterations=10^5)
-    sol=Optim.minimizer(opt)
-    #sol2=Optim.minimizer(opt3)
+    #Recomputing p_hat
+    out2 = mixSQP(MatA(θ_hat,data,dens),x = ones(length(θ_hat))/length(θ_hat),verbose=false); 
+    p_hat=out2["x"] 
+    if twostep
+        #Final optimization
+        param_ini=vcat(θ_hat,log.(ones(length(θ_hat))[1:end-1]/length(θ_hat))) # Log is taken since we use exp(variable) to guarantee that p>0
+        #param_ini=vcat(θ_hat,log.(p_hat)[1:end-1]) # Log is taken since we use exp(variable) to guarantee that p>0
+        #opt2 = optimize(vars->-loglike(vars,data), param_ini1, iterations=10^5)
+        opt = optimize(vars->-loglike(vars,data,dens), param_ini, iterations=10^5)
+        sol=Optim.minimizer(opt)
+        #sol2=Optim.minimizer(opt3)
 
-    #Checking if the true parameter value gives a better objective function
-    println("The solution is better than the true parameter value --",(-loglike(vcat(pis,log.(p[1:end-1])),data,dens)>Optim.minimum(opt)))
-    #Final estimates
-    θ_hat=sol[1:length(θ_hat)]
-    p_hat=vcat(exp.(sol[length(θ_hat)+1:end]),1.0-sum(exp.(sol[length(θ_hat)+1:end])))
+        #Checking if the true parameter value gives a better objective function
+        println("The solution is better than the true parameter value --",(-loglike(vcat(pis,log.(p[1:end-1])),data,dens)>Optim.minimum(opt)))
+        #Final estimates
+        θ_hat=sol[1:length(θ_hat)]
+        p_hat=vcat(exp.(sol[length(θ_hat)+1:end]),1.0-sum(exp.(sol[length(θ_hat)+1:end])))
+    end
     return θ_hat, p_hat
 end
+
+function mixed_density(data, kerfun, cluster_distance)
+    clusters=dbscan(data', cluster_distance)
+    basecluster, d, ntypes, pis_ini=f_basecluster(clusters,0)
+    coredata=data[clusters[basecluster].core_indices];
+    lscv_res = lscv(kerfun,coredata,FFT())
+    bandw = minimizer(lscv_res)
+    fkde = kde(kerfun, bandw, coredata, FFT())
+    sup_length=maximum(coredata)-minimum(coredata)+2*bandw
+    dens(x)=fkde(x+minimum(coredata)-bandw+sup_length/2)
+    return dens, sup_length
+end
+
+

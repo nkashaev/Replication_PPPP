@@ -16,10 +16,10 @@ include(dirmain*"polyn_functions.jl")
 include(dirmain*"mixSQP.jl")
 
 # Parameter of DGP
-pis=[2.0, 2.5, 3.0, 3.5, 6.0];
-p=[0.15,0.25,0.1, 0.2, 0.3];
+pis=[2.0, 3.0, 3.5, 6.0];
+p=[0.2,0.25, 0.25, 0.3];
 seed=8;
-n=1000;
+n=5000;
 data=dgp(pis,p,n,seed);
 histogram(data)
 
@@ -32,7 +32,7 @@ cluster_distance=0.3
 dens, sup_length=mixed_density(data, kerfun, cluster_distance)
 plot(-1.5:0.001:1.5,dens.(-1.5:0.001:1.5))
 #Solution
-T=5
+T=4
 npoints=100
 τ=0.001
 twostep=false

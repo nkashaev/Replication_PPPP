@@ -19,20 +19,6 @@ pis=[2.0, 3.0, 3.5, 6.0];
 p=[0.2,0.25, 0.25, 0.30];
     
 #################################### Correct number of types #################################### 
-T=4
-N=[500, 1000, 1500]
-Kern=["epanechnikov","biweight","triweight"]
-Table4=zeros(length(Kern),2*length(N))
-for i in 1:length(N), j in 1:length(Kern)
-    n=N[i]; kerfunK=Kern[j]
-    output=Matrix(CSV.read(dirresults*"/thetap_DGP1_$(n)_$(kerfunK)_$(T).csv", DataFrame))
-    baddgp=unique(findall(output.==-1000)[k][2] for k in 1:length(findall(output.==-1000)))
-    output=output[:,setdiff(1:size(output,2),baddgp)]
-    bpi=mean([output[1:length(pis),k].-pis for k in 1:size(output,2)])
-    rmsepi=sqrt.(mean([(output[1:length(pis),k].-pis).^2 for k in 1:size(output,2)]))
-    Table4[j,2i-1]=bpi[4]
-    Table4[j,2i]=rmsepi[4]
-end
 
 param=vcat(pis,p)
 T=4
@@ -42,7 +28,7 @@ Table4=zeros(length(param),2*length(N))
 kerfunK="epanechnikov"
 for i in 1:length(N)
     n=N[i]
-    output=Matrix(CSV.read(dirresults*"/thetap_DGP2_$(n)_$(kerfunK)_$(T).csv", DataFrame))
+    output=Matrix(CSV.read(dirresults*"/thetap_DGP1_$(n)_$(kerfunK)_$(T).csv", DataFrame))
     baddgp=unique(findall(output.<0.01)[k][2] for k in 1:length(findall(output.<0.01)))
     output=output[:,setdiff(1:size(output,2),baddgp)]
     bpi=mean([output[:,k].-param for k in 1:size(output,2)])

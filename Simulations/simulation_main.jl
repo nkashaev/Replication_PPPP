@@ -28,10 +28,10 @@ addprocs(numprocs)
     # Parameter of DGP
     pis=[2.0, 3.0, 3.5, 6.0];
     p=[0.2,0.25, 0.25, 0.30];    
-    τ=0.01
+    # τ=0.01
     cluster_distance=0.3
-    npoints=50
-    twostep=true
+    # npoints=50
+    # twostep=true
 end
 kT=ARGS[1]
 # println(kT)
@@ -60,18 +60,18 @@ end
 
 @everywhere n=$(parse(Int16,ARGS[2]))
 @everywhere T=$(parse(Int16,ARGS[3]))    
-if (ARGS[4])=="false"   
-    @everywhere onestep=false
-else
-    @everywhere onestep=true
-end
+# if (ARGS[4])=="false"   
+#     @everywhere onestep=false
+# else
+#     @everywhere onestep=true
+# end
 
 println("T=",T)
 println(kerfunB)
 println("n=",n)
-println("onestep=",onestep)
+# println("onestep=",onestep)
 println("Ready")
-# @time onesimulation(1)
+#@time onesimulation(1)
 @time Results=pmap(onesimulation,1:1000)
 Outcome=zeros(2*T,length(Results))
 for j in 1:length(Results)
@@ -80,11 +80,7 @@ end
 
 ## Saving the output
 println("Saving the results")
-if onestep
-    CSV.write(dirmain*"results/thetap_DGP1_$(n)_$(kerfunK)_$(T).csv", DataFrame(Outcome,:auto))
-else
-    CSV.write(dirmain*"results/thetap_DGP2_$(n)_$(kerfunK)_$(T).csv", DataFrame(Outcome,:auto))
-end
+CSV.write(dirmain*"results/thetap_DGP_$(n)_$(kerfunK)_$(T).csv", DataFrame(Outcome,:auto))
 println("Done")
 
 

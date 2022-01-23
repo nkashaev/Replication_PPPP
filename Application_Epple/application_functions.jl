@@ -99,8 +99,11 @@ function mixture_dist1(data, dens, sup_length, T, npoints, τ)
 
     #Taking solutions with large enough weigths
     p_raw=out1["x"]
-    θ_raw=θ[p_raw .>τ]
-    p_raw=p_raw[p_raw .>τ]
+    if sum(p_raw .>=τ)<T
+        τ=minimum(sort(p_raw,rev=true)[1:T])
+    end
+    θ_raw=θ[p_raw .>=τ]
+    p_raw=p_raw[p_raw .>=τ]
 
     #Clustering θ to T types
     cl_θ=Clustering.kmeans(θ_raw', minimum([length(θ_raw),T]); weights=p_raw)

@@ -20,7 +20,7 @@ dirtg=dirmain*"tables and graphs"
 # include(dirmain*"mixSQP.jl")
 
 #################################### Data #################################### 
-nc=10
+nc=8
 data=CSV.read(dirdata*"/data_cleaned_$(nc).csv", DataFrame)
 pl=data[:,1]; v=data[:,2]; market=data[:,3]; zip=data[:,4];
 output=Matrix(CSV.read(dirresults*"/output_level.csv", DataFrame))
@@ -29,7 +29,7 @@ price=Matrix(CSV.read(dirresults*"/output_price.csv", DataFrame))[:]
 Table1=zeros(2,5)
 Table1[1,:]=hcat(mean(v),median(v),std(v),minimum(v),maximum(v))
 Table1[2,:]=hcat(mean(pl),median(pl),std(pl),minimum(pl),maximum(pl))
-Table1=DataFrame(Table_sum,[:Mean,:Median,:Std,:Min,:Max])
+Table_sum=DataFrame(Table1,[:Mean,:Median,:Std,:Min,:Max])
 insertcols!(Table_sum,1,:Variable=>["Value per unit of land","price of land"])
 CSV.write(dirtg*"/Table1.csv",  Table1)
 

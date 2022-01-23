@@ -1,6 +1,6 @@
 ## Kernel
-epanechnikov(x) =  (abs(x) <= 1.0) ? 0.75 * (1.0-x^2) : 0.0
-npdf(x)=exp(-x^2/2.0)/sqrt(2.0*pi)
+epanechnikov(x::Real) =  (abs(x) <= 1.0) ? 0.75 * (1.0-x^2) : 0.0
+npdf(x::Real)=exp(-x^2/2.0)/sqrt(2.0*pi)
 ## CDFs based on kernel
 epanechnikovInvCDF(x) =  (0.0 <= x <= 1.0) ? 2.0*sin(asin(2.0*x - 1)/3.0) : println("out of bounds")
 

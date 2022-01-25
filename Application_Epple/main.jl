@@ -19,7 +19,7 @@ include(dirmain*"application_functions.jl")
 include(dirmain*"mixSQP.jl")
 
 #################################### Data #################################### 
-nc=8
+nc=10
 data=CSV.read(dirdata*"/data_cleaned_$(nc).csv", DataFrame)
 pl=data[:,1]; v=data[:,2]; market=data[:,3]; zip=data[:,4];
 #################################### Deconvolution of mismeasured values #################################### 
@@ -84,8 +84,8 @@ for m in 1:length(Theta)
     po[m]=f_po(vbar[m])
     yo[:,m]=sort(Theta[m])./po[m]
 end
-
-plot(log.(po[2:end]),log.(yo[:,2:end]'))
+plot(yo')
+# [(log.(po[m]),log.(yo[4,m]')) for m=2:8]
 #Saving results
-CSV.write(dirresults*"/output_level_$(nc).csv", DataFrame(yo,:auto))
-CSV.write(dirresults*"/output_price_$(nc).csv", DataFrame(po',:auto))
+CSV.write(dirresults*"/output_level_$(nc)_$(T).csv", DataFrame(yo,:auto))
+CSV.write(dirresults*"/output_price_$(nc)_$(T).csv", DataFrame(po',:auto))

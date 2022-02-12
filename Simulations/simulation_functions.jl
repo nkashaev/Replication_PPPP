@@ -77,7 +77,7 @@ function mixture_dist2(data, dens, param_ini)
     model = Model(with_optimizer(KNITRO.Optimizer))
     # empty!(model)
     set_silent(model)
-    set_optimizer_attribute(model,"xtol",1e-6) #Right now it is 1e-4
+    set_optimizer_attribute(model,"xtol",1e-8)
     # set_optimizer_attribute(model,"print_level",0)
     #model = Model(with_optimizer(KNITRO.Optimizer))
     register(model, :dens, 1, dens; autodiff = true)

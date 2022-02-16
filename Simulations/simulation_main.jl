@@ -26,7 +26,8 @@ addprocs(numprocs)
     include(dirmain*"mixSQP.jl")
 
     # Parameter of DGP
-    pis=[2.0, 3.0, 3.5, 6.0];
+    # pis=[2.0, 3.0, 3.5, 6.0];
+    pis=[2.0, 3.0, 4.0, 7.0];
     p=[0.2,0.25, 0.25, 0.30];    
     # τ=0.01
     cluster_distance=0.3
@@ -80,7 +81,7 @@ end
 
 ## Saving the output
 println("Saving the results")
-CSV.write(dirmain*"results/thetap_DGP_$(n)_$(kerfunK)_$(T).csv", DataFrame(Outcome,:auto))
+CSV.write(dirmain*"results/thetap_DGP2_$(n)_$(kerfunK)_$(T).csv", DataFrame(Outcome,:auto))
 println("Done")
 
 

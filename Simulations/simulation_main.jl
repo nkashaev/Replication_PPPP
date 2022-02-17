@@ -26,8 +26,7 @@ addprocs(numprocs)
     include(dirmain*"mixSQP.jl")
 
     # Parameter of DGP
-    # pis=[2.0, 3.0, 3.5, 6.0];
-    pis=[2.0, 3.0, 4.0, 7.0];
+    pis=[2.0, 3.0, 3.5, 6.0];
     p=[0.2,0.25, 0.25, 0.30];    
     # τ=0.01
     cluster_distance=0.3
@@ -55,8 +54,8 @@ else
     error("Wrong kernel")
 end
 
-# @everywhere n=5000
-#@everywhere T=5
+# @everywhere n=1000
+# @everywhere T=4
 
 
 @everywhere n=$(parse(Int16,ARGS[2]))
@@ -72,7 +71,7 @@ println(kerfunB)
 println("n=",n)
 # println("onestep=",onestep)
 println("Ready")
-#@time onesimulation(1)
+# @time onesimulation(1)
 @time Results=pmap(onesimulation,1:1000)
 Outcome=zeros(2*T,length(Results))
 for j in 1:length(Results)
@@ -81,7 +80,7 @@ end
 
 ## Saving the output
 println("Saving the results")
-CSV.write(dirmain*"results/thetap_DGP2_$(n)_$(kerfunK)_$(T).csv", DataFrame(Outcome,:auto))
+CSV.write(dirmain*"results/thetap_DGP_$(n)_$(kerfunK)_$(T).csv", DataFrame(Outcome,:auto))
 println("Done")
 
 

@@ -19,7 +19,7 @@ include(dirmain*"application_functions.jl")
 include(dirmain*"mixSQP.jl")
 
 #################################### Data #################################### 
-nc=10
+nc=8
 data=CSV.read(dirdata*"/data_cleaned_$(nc).csv", DataFrame)
 pl=data[:,1]; v=data[:,2]; market=data[:,3]; zip=data[:,4];
 #################################### Deconvolution of mismeasured values #################################### 

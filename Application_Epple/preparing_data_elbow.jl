@@ -6,7 +6,7 @@ using LinearAlgebra, DelimitedFiles
 using Distributions, Statistics, Random
 using Clustering
 using CSV, DataFrames
-
+using Plots
 #################################### Dir ###############################
 tempdir1=@__DIR__
 rootdir=tempdir1[1:findfirst("PPPP",tempdir1)[end]]
@@ -31,10 +31,10 @@ N=length(pl);
 #Zipcodes
 Z=(minimum(y).<=zipcodedata_raw[:,2].<=maximum(y)).*(minimum(x).<=zipcodedata_raw[:,3].<=maximum(x))
 zip_coord=zipcodedata_raw[Z,:]
-zip=zeros(N)
+zip_l=zeros(N)
 for i in 1:N
     D=(x[i] .- zip_coord[:,3]).^2 .+ (y[i] .- zip_coord[:,2]).^2
-    zip[i]=zip_coord[argmin(D),1]
+    zip_l[i]=zip_coord[argmin(D),1]
 end
 ####### Elbow method to define the number of clusters ######################
 K=10
@@ -69,6 +69,6 @@ for m in 1:nc
     markets_sort[markets.==marketperm[m]].=1.0*m
 end
 
-Data_cl=hcat(pl,v,markets_sort,zip)
+Data_cl=hcat(pl,v,markets_sort,zip_l)
 #Saving results
 CSV.write(dirdata*"/data_cleaned_$(nc).csv", DataFrame(Data_cl,[:pl, :v, :markets, :zip]))

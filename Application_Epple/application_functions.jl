@@ -131,10 +131,8 @@ end
 function mixed_density_app(dataforme, kerfunB, kerfunK)
     lscv_res = lscv(kerfunB,dataforme,FFT())
     bandw = Real(minimizer(lscv_res))
-    #fkde = kde(kerfun, bandw, dataforme, FFT())
     sup_length=Real(maximum(dataforme)-minimum(dataforme)+2*bandw)
     dens(x::Real)=sum( kerfunK((x+Real(minimum(dataforme)-bandw+sup_length/2-z))/bandw) for z in dataforme)/(length(dataforme)*bandw)
-    #dens(x)=fkde(x+minimum(dataforme)-bandw+sup_length/2)
     return dens, sup_length
 end
 

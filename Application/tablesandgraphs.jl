@@ -75,18 +75,6 @@ plot(log.(price_toplot),log.(output_toplot'))
 [(log.(price_toplot[m]),log.(output_toplot[3,m]')) for m in 1:nmarketstoplot]
 [(log.(price_toplot[m]),log.(output_toplot[4,m]')) for m in 1:nmarketstoplot]
 
-function average_elasticity(y,x)
-    elas=0.0
-    for i in 1:length(x)-1
-        elas=elas+(y[i+1]-y[i])/(x[i+1]-x[i])
-    end
-    return elas/(length(x)-1)
-end 
-[average_elasticity(log.(output_toplot[1,:]'),log.(price_toplot))
-average_elasticity(log.(output_toplot[2,:]'),log.(price_toplot))
-average_elasticity(log.(output_toplot[3,:]'),log.(price_toplot))
-average_elasticity(log.(output_toplot[4,:]'),log.(price_toplot))]
-
 # Monotone supply
 model_mon=Model(with_optimizer(KNITRO.Optimizer))
 npar=length(output_toplot[1,:]')
@@ -111,7 +99,19 @@ price_mon=price[nc-nmarketstoplot+1:nc]
 [(log.(price_toplot[m]),log.(monoutput[4,m]')) for m in 1:nmarketstoplot]
 
 
-Table2=round.([average_elasticity(log.(monoutput[1,:]'),log.(price_toplot))
+# Average elasticity
+function average_elasticity(y,x)
+    elas=0.0
+    for i in 1:length(x)-1
+        elas=elas+(y[i+1]-y[i])/(x[i+1]-x[i])
+    end
+    return elas/(length(x)-1)
+end 
+
+Table2=DataFrame(hcat([1,2,3,4],round.([average_elasticity(log.(monoutput[1,:]'),log.(price_toplot))
 average_elasticity(log.(monoutput[2,:]'),log.(price_toplot))
 average_elasticity(log.(monoutput[3,:]'),log.(price_toplot))
-average_elasticity(log.(monoutput[4,:]'),log.(price_toplot))], digits=2)
+average_elasticity(log.(monoutput[4,:]'),log.(price_toplot))], digits=2))',:auto)
+insertcols!(Table2,1,:Variable=>["Average Elasticity","productivity level"])
+
+CSV.write(dirtg*"/Table2.csv",  Table2)

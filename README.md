@@ -17,7 +17,7 @@ Data Sources
 The paper uses one data set from
 
 -   Epple, Dennis, Brett Gordon, and Holger Sieg (2010). A new approach to estimating
-the production function for housing, American Economic Review, 100 (3), 905–24 <https://doi.org/10.1257/aer.100.3.905>
+the production function for housing, American Economic Review, 100 (3), 905–24. <https://doi.org/10.1257/aer.100.3.905>
 
 and `Julia` code from 
 

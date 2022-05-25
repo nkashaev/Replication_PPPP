@@ -11,7 +11,7 @@ using CSV, DataFrames
 #################################### Dir ###############################
 tempdir1=@__DIR__
 rootdir=tempdir1[1:findfirst("PPPP",tempdir1)[end]]
-dirmain=rootdir*"/Application_Epple/"
+dirmain=rootdir*"/Application/"
 dirdata=dirmain*"data"
 dirresults=dirmain*"results"
 #################################### Functions ###############################
@@ -70,7 +70,6 @@ for m in 1:length(Theta)
     po[m]=f_po(vbar[m])
     yo[:,m]=sort(Theta[m])./po[m]
 end
-plot(yo')
 
 #Saving results
 CSV.write(dirresults*"/output_level_$(nc)_$(T).csv", DataFrame(yo,:auto))

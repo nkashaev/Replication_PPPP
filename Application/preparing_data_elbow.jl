@@ -10,13 +10,13 @@ using Plots
 #################################### Dir ###############################
 tempdir1=@__DIR__
 rootdir=tempdir1[1:findfirst("PPPP",tempdir1)[end]]
-dirmain=rootdir*"/Application_Epple/"
+dirmain=rootdir*"/Application/"
 dirdata=dirmain*"data"
 dirresults=dirmain*"results"
 
 #################################### Data #################################### 
-EppleData=readdlm(dirdata*"/Pittsburgh_post1995.txt", ',', Float64, '\n',header=true);
-Data=EppleData[1];
+EData=readdlm(dirdata*"/Pittsburgh_post1995.txt", ',', Float64, '\n',header=true);
+Data=EData[1];
 zipcodedata_raw=readdlm(dirdata*"/US Zip Codes from 2013 Government Data.txt", ',', Float64, '\n',header=true)[1];
 
 #Removing locations, pl, and v outliers. Also removing houses with high pl and value 

@@ -12,13 +12,10 @@ using JuMP, KNITRO
 #################################### Dir ###############################
 tempdir1=@__DIR__
 rootdir=tempdir1[1:findfirst("PPPP",tempdir1)[end]]
-dirmain=rootdir*"/Application_Epple/"
+dirmain=rootdir*"/Application/"
 dirdata=dirmain*"data"
 dirresults=dirmain*"results"
 dirtg=dirmain*"tables and graphs"
-# #################################### Functions ###############################
-# include(dirmain*"application_functions.jl")
-# include(dirmain*"mixSQP.jl")
 
 #################################### Data #################################### 
 nc=8
@@ -27,18 +24,18 @@ data=CSV.read(dirdata*"/data_cleaned_$(nc).csv", DataFrame)
 pl=data[:,1]; v=data[:,2]; market=data[:,3]; zip=data[:,4];
 output=Matrix(CSV.read(dirresults*"/output_level_$(nc)_$(T).csv", DataFrame))
 price=Matrix(CSV.read(dirresults*"/output_price_$(nc)_$(T).csv", DataFrame))[:]
-#################################### Plotting #################################### 
+####################################Tables and Figures#################################### 
 Table1=zeros(2,5)
 Table1[1,:]=hcat(mean(v),median(v),std(v),minimum(v),maximum(v))
 Table1[2,:]=hcat(mean(pl),median(pl),std(pl),minimum(pl),maximum(pl))
 Table_sum=DataFrame(round.(Table1,digits=2),[:Mean,:Median,:Std,:Min,:Max])
 insertcols!(Table_sum,1,:Variable=>["Value per unit of land","price of land"])
-CSV.write(dirtg*"/Table1.csv",  Table_sum)
+CSV.write(dirtg*"/Table_1.csv",  Table_sum)
 
-Fig6=scatter(pl,v,legend=false, xaxis="Price of land",yaxis="Value per unif of land")
-savefig(Fig6,dirtg*"/Fig_6.pdf")
-Fig7=scatter(market, pl, color=:lightrainbow, legend=false, xaxis="Market",yaxis="Price of land")
+Fig7=scatter(pl,v,legend=false, xaxis="Price of land",yaxis="Value per unif of land")
 savefig(Fig7,dirtg*"/Fig_7.pdf")
+Fig8=scatter(market, pl, color=:lightrainbow, legend=false, xaxis="Market",yaxis="Price of land")
+savefig(Fig8,dirtg*"/Fig_8.pdf")
 
 function rectangle_from_coords(xb,yb,xt,yt)
     [
@@ -56,9 +53,9 @@ rects=[
     rectangle_from_coords(6.7, 41, 7.3, 55)
 ]
 
-Fig8=scatter(market, v, color=:lightrainbow, legend=false, xaxis="Market",yaxis="Value per unif of land")
+Fig9=scatter(market, v, color=:lightrainbow, legend=false, xaxis="Market",yaxis="Value per unif of land")
 plot!(rects[:,1], rects[:,2])
-savefig(Fig8,dirtg*"/Fig_8.pdf")
+savefig(Fig9,dirtg*"/Fig_9.pdf")
 
 ### Footnote 34
 (maxstd,maxstdmarket)=round.(findmax([std(pl[market.==k]) for k in 1:8]),digits=2)
@@ -112,6 +109,6 @@ Table2=DataFrame(hcat([1,2,3,4],round.([average_elasticity(log.(monoutput[1,:]')
 average_elasticity(log.(monoutput[2,:]'),log.(price_toplot))
 average_elasticity(log.(monoutput[3,:]'),log.(price_toplot))
 average_elasticity(log.(monoutput[4,:]'),log.(price_toplot))], digits=2))',:auto)
-insertcols!(Table2,1,:Variable=>["Average Elasticity","productivity level"])
+insertcols!(Table2,1,:Variable=>["Productivity level", "Average Elasticity"])
 
-CSV.write(dirtg*"/Table2.csv",  Table2)
+CSV.write(dirtg*"/Table_2.csv",  Table2)

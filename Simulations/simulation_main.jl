@@ -28,13 +28,10 @@ addprocs(numprocs)
     # Parameter of DGP
     pis=[2.0, 3.0, 3.5, 6.0];
     p=[0.2,0.25, 0.25, 0.30];    
-    # τ=0.01
     cluster_distance=0.3
-    # npoints=50
-    # twostep=true
 end
 kT=ARGS[1]
-# println(kT)
+
 if kT=="Epanechnikov"
     @everywhere begin 
         kerfunB=Epanechnikov   
@@ -54,24 +51,15 @@ else
     error("Wrong kernel")
 end
 
-# @everywhere n=1000
-# @everywhere T=4
-
 
 @everywhere n=$(parse(Int16,ARGS[2]))
 @everywhere T=$(parse(Int16,ARGS[3]))    
-# if (ARGS[4])=="false"   
-#     @everywhere onestep=false
-# else
-#     @everywhere onestep=true
-# end
 
 println("T=",T)
 println(kerfunB)
 println("n=",n)
-# println("onestep=",onestep)
 println("Ready")
-# @time onesimulation(1)
+
 @time Results=pmap(onesimulation,1:1000)
 Outcome=zeros(2*T,length(Results))
 for j in 1:length(Results)

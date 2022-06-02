@@ -37,16 +37,6 @@ if kT=="Epanechnikov"
         kerfunB=Epanechnikov   
         kerfunK=epanechnikov       
     end
-elseif kT=="Biweight"
-    @everywhere begin 
-        kerfunB=Biweight
-        kerfunK=biweight
-    end
-elseif kT=="Triweight"
-    @everywhere begin 
-        kerfunB=Triweight
-        kerfunK=triweight
-    end
 else 
     error("Wrong kernel")
 end

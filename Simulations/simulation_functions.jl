@@ -1,7 +1,5 @@
 ## Kernel
 epanechnikov(x::Real) =  (abs(x) <= 1.0) ? 0.75 * (1.0 - x^2) : 0.0
-biweight(x::Real) =  (abs(x) <= 1.0) ? 0.9375 * (1.0 - x^2)^2 : 0.0
-triweight(x::Real) =  (abs(x) <= 1.0) ? 1.09375 * (1.0 - x^2)^3 : 0.0
 
 ## CDFs based on kernel
 epanechnikovInvCDF(x) =  (0.0 <= x <= 1.0) ? 2.0*sin(asin(2.0*x - 1)/3.0) : println("out of bounds")
@@ -15,13 +13,9 @@ end
 
 function mixture_dist2(data, dens, param_ini)
     model = Model(with_optimizer(KNITRO.Optimizer))
-    # empty!(model)
     set_silent(model)
     set_optimizer_attribute(model,"xtol",1e-8)
-    # set_optimizer_attribute(model,"print_level",0)
-    #model = Model(with_optimizer(KNITRO.Optimizer))
     register(model, :dens, 1, dens; autodiff = true)
-    #set_optimizer_attribute(model,"outlev",0)
     npar=Int(length(param_ini)/2)
     @variable(model, x[1:2*npar] >= 0.0)
     @constraint(model, c1, sum(x[npar+1:end])==1.0)

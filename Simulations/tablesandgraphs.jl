@@ -47,14 +47,3 @@ Table_pi_epanechnikov=table_simul_pi("epanechnikov",N,T,pis)
 Table_p_epanechnikov=table_simul_rho("epanechnikov",N,T,p)
 CSV.write(dirtg*"/Table_pi_epanechnikov.csv", DataFrame(Table_pi_epanechnikov,:auto))
 CSV.write(dirtg*"/Table_rho_epanechnikov.csv", DataFrame(Table_p_epanechnikov,:auto))
-
-Table_pi_biweight=table_simul_pi("biweight",N,T,pis)
-Table_p_biweight=table_simul_rho("biweight",N,T,p)
-CSV.write(dirtg*"/Table_pi_biweight.csv", DataFrame(Table_pi_biweight,:auto))
-CSV.write(dirtg*"/Table_rho_biweight.csv", DataFrame(Table_p_biweight,:auto))
-
-Table_pi_triweight=table_simul_pi("triweight",N,T,pis)
-Table_p_triweight=table_simul_rho("triweight",N,T,p)
-CSV.write(dirtg*"/Table_pi_triweight.csv", DataFrame(Table_pi_triweight,:auto))
-CSV.write(dirtg*"/Table_rho_triweight.csv", DataFrame(Table_p_triweight,:auto))
-

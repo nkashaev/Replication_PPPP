@@ -25,7 +25,7 @@ pl=data[:,1]; v=data[:,2]; market=data[:,3]; zip=data[:,4];
 #################################### Deconvolution of mismeasured values #################################### 
 ### Estimation of the pdf of the measurement error
 #Markets 6 and 7 have very similar upper clusters
-#We will demean them, pull them together and estimate the measurement error density
+#We demean them, pull them together and estimate the measurement error density
 dataforme1=sort(v[market.==6])[465:end]
 dataforme2=sort(v[market.==7])[241:end]
 dataforme=sort(vcat(dataforme1 .-mean(dataforme1),dataforme2 .-mean(dataforme2)))
@@ -39,7 +39,7 @@ T=4 # Number of types
 
 npoints=100 # Number of discritizations on the 1st step
 τ=0.0001 #Threshold for trimming
-twostep=true #Set to true to use 
+twostep=true 
 Theta=Array{Vector{Float64}}(undef,nc)
 P=Array{Vector{Float64}}(undef,nc)
 model = Model(with_optimizer(KNITRO.Optimizer))

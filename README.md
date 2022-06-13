@@ -100,14 +100,13 @@ This folder contains all tables and figures from Appendix C.
 `results`
 -----------
 This folder constains simulation results used in construction of table in Online Appendix A
--    `thetap_DGP_n_ker_4.csv` -- simulation results for estimated \pi for sample size n with kernel ker (n in {500,1000,1500}; ker in {biweight, epanechnikov, triweight})
+-    `thetap_DGP_n_epanechnikov_4.csv` -- simulation results for estimated \pi and \rho for sample size n with the epanechnikov kernel (n in {500,1000,1500})
 
--    `thetarho_DGP_n_ker_4.csv` -- simulation results for estimated \rho for sample size n with kernel ker (n in {500,1000,1500}; ker in {biweight, epanechnikov, triweight})
 
 `tables and graphs`
 -----------
 This folder constains all table in Online Appendix A
--    `Table_param_ker_4.csv` -- Table for estimated param with kernel ker (param in {\pi, \rho}; ker in {biweight, epanechnikov, triweight})
+-    `Table_param_epanechnikov_4.csv` -- Table for estimated param with the epanechnikov kernel (param in {\pi, \rho})
 
 
 `root files`
